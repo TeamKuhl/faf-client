@@ -1,2 +1,2 @@
-# findafriend
+# Find a Friend
 Freunde!
