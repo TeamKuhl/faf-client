@@ -45,7 +45,7 @@
             // 
             // walkTimer
             // 
-            this.walkTimer.Interval = 1;
+            this.walkTimer.Interval = 50;
             this.walkTimer.Tick += new System.EventHandler(this.walkTimer_Tick);
             // 
             // MainForm

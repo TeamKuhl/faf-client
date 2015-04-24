@@ -19,6 +19,10 @@ namespace FAFClient
 
         private Renderer renderer = new Renderer();
 
+        Random rnd = new Random();
+
+        private bool grow = true;
+
         public MainForm()
         {
             InitializeComponent();
@@ -34,7 +38,7 @@ namespace FAFClient
             renderer.Width = 1000;
             renderer.Background = new Texture(203, 186, 156);
             renderer.Background.Stretch = false;
-
+            
             addFriend(50, 50, new Texture(120, 34, 73));
             addFriend(900, 400, new Texture(54, 118, 32));
 
@@ -102,8 +106,10 @@ namespace FAFClient
             item.CheckCollision = true;
             texture.Stretch = false;
             item.Texture = texture;
-            renderer.SetItem(item.Uuid, item);
-            friends.Add(item.Uuid, item);
+            if (renderer.SetItem(item.Uuid, item))
+            {
+                friends.Add(item.Uuid, item);
+            }
         }
 
         private void rendererEvent(Image aFrame)
@@ -125,10 +131,25 @@ namespace FAFClient
         {
             if (friends.ContainsKey(e.ActiveItem.Uuid) && friends.ContainsKey(e.PassiveItem.Uuid))
             {
-                Random rnd = new Random();
-                Texture txt = new Texture(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
-                txt.Stretch = false;
-                addFriend(rnd.Next(50, 901), rnd.Next(50, 401), txt);
+                if(grow)
+                {
+                    if (friends.Count <= 500)
+                    {
+                        Texture txt = new Texture(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                        txt.Stretch = false;
+                        addFriend(rnd.Next(50, 901), rnd.Next(50, 401), txt);
+                    }
+                    else grow = false;
+                }
+                else
+                {
+                    if (friends.Count >= 50)
+                    {
+                       friends.Remove(e.PassiveItem.Uuid);
+                       renderer.SetItemEnabled(e.PassiveItem.Uuid, false);
+                    }
+                    else grow = true;
+                }
             }
 
             e.Cancel = true;
@@ -141,7 +162,6 @@ namespace FAFClient
 
         private void walkTimer_Tick(object sender, EventArgs e)
         {
-            Random rnd = new Random();
             try
             {
                 Dictionary<string, Item> copy = new Dictionary<string, Item>(friends);
@@ -149,7 +169,7 @@ namespace FAFClient
                 foreach (KeyValuePair<string, Item> friend in copy)
                 {
 
-                    int amount = rnd.Next(1, 50);
+                    int amount = rnd.Next(1, 30);
 
                     Item item = renderer.GetItem(friend.Value.Uuid);
 
