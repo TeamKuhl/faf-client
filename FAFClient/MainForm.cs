@@ -52,7 +52,7 @@ namespace FAFClient
             wallLeft.Texture.Stretch = false;
             wallLeft.Enabled = true;
             wallLeft.CheckCollision = true;
-            renderer.SetItem(wallLeft.Uuid, wallLeft);
+            renderer.SetItem(wallLeft);
 
             // right
             Item wallRight = renderer.CreateItem();
@@ -64,7 +64,7 @@ namespace FAFClient
             wallRight.Texture.Stretch = false;
             wallRight.Enabled = true;
             wallRight.CheckCollision = true;
-            renderer.SetItem(wallRight.Uuid, wallRight);
+            renderer.SetItem(wallRight);
 
             // top
             Item wallTop = renderer.CreateItem();
@@ -75,7 +75,7 @@ namespace FAFClient
             wallTop.Texture.Stretch = false;
             wallTop.Enabled = true;
             wallTop.CheckCollision = true;
-            renderer.SetItem(wallTop.Uuid, wallTop);
+            renderer.SetItem(wallTop);
 
             // bottom
             Item wallBottom = renderer.CreateItem();
@@ -87,7 +87,7 @@ namespace FAFClient
             wallBottom.Texture.Stretch = false;
             wallBottom.Enabled = true;
             wallBottom.CheckCollision = true;
-            renderer.SetItem(wallBottom.Uuid, wallBottom);
+            renderer.SetItem(wallBottom);
 
             renderer.Start();
 
@@ -106,7 +106,7 @@ namespace FAFClient
             item.CheckCollision = true;
             texture.Stretch = false;
             item.Texture = texture;
-            if (renderer.SetItem(item.Uuid, item))
+            if (renderer.SetItem(item))
             {
                 friends.Add(item.Uuid, item);
             }
@@ -147,9 +147,15 @@ namespace FAFClient
                     {
                        friends.Remove(e.PassiveItem.Uuid);
                        renderer.SetItemEnabled(e.PassiveItem.Uuid, false);
+                       renderer.DeleteItem(e.PassiveItem.Uuid);
                     }
                     else grow = true;
                 }
+            }
+
+            if (e.ActiveItem.Enabled == false)
+            {
+                renderer.DeleteItem(e.ActiveItem.Uuid);
             }
 
             e.Cancel = true;
@@ -189,7 +195,7 @@ namespace FAFClient
                             break;
                     }
 
-                    renderer.SetItem(friend.Value.Uuid, item);
+                    renderer.SetItem(item);
                 }
             }
             catch
