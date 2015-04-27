@@ -41,6 +41,9 @@ namespace FAFClient
             
             addFriend(50, 50, new Texture(120, 34, 73));
             addFriend(900, 400, new Texture(54, 118, 32));
+            addRandomFriend();
+            addRandomFriend();
+            addRandomFriend();
 
             // left
             Item wallLeft = renderer.CreateItem();
@@ -135,9 +138,7 @@ namespace FAFClient
                 {
                     if (friends.Count <= 500)
                     {
-                        Texture txt = new Texture(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
-                        txt.Stretch = false;
-                        addFriend(rnd.Next(50, 901), rnd.Next(50, 401), txt);
+                        addRandomFriend();
                     }
                     else grow = false;
                 }
@@ -159,6 +160,13 @@ namespace FAFClient
             }
 
             e.Cancel = true;
+        }
+
+        private void addRandomFriend()
+        {
+            Texture txt = new Texture(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+            txt.Stretch = false;
+            addFriend(rnd.Next(50, 901), rnd.Next(50, 401), txt);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
