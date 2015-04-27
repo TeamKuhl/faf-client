@@ -15,7 +15,7 @@ namespace FAFClient
     {
 
         public delegate void emptyFunction();
-        Dictionary<string, Item> friends = new Dictionary<string, Item>();
+        Dictionary<string, Friend> friends = new Dictionary<string, Friend>();
 
         private Renderer renderer = new Renderer();
 
@@ -111,7 +111,7 @@ namespace FAFClient
             item.Texture = texture;
             if (renderer.SetItem(item))
             {
-                friends.Add(item.Uuid, item);
+                friends.Add(item.Uuid, new Friend(item));
             }
         }
 
@@ -178,32 +178,20 @@ namespace FAFClient
         {
             try
             {
-                Dictionary<string, Item> copy = new Dictionary<string, Item>(friends);
+                Dictionary<string, Friend> copy = new Dictionary<string, Friend>(friends);
 
-                foreach (KeyValuePair<string, Item> friend in copy)
+                foreach (KeyValuePair<string, Friend> friend in copy)
                 {
+                    int directionModifier = 0;
+                    int lengthModifier = 0;
 
-                    int amount = rnd.Next(1, 30);
-
-                    Item item = renderer.GetItem(friend.Value.Uuid);
-
-                    switch (rnd.Next(1, 5))
+                    if (friend.Value.MoveLock == 0)
                     {
-                        case 1:
-                            item.X = item.X + amount;
-                            break;
-                        case 2:
-                            item.X = item.X - amount;
-                            break;
-                        case 3:
-                            item.Y = item.Y + amount;
-                            break;
-                        case 4:
-                            item.Y = item.Y - amount;
-                            break;
+                        directionModifier = rnd.Next(-5, 6);
+                        lengthModifier = rnd.Next(3, 5);
                     }
 
-                    renderer.SetItem(item);
+                    //renderer.SetItem(item);
                 }
             }
             catch
